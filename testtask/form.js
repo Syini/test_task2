@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 
 var https = require("https");
-var username = 'jquery';
+var username = 'Syini';
 
 const app = express();
 var body = '';
@@ -11,10 +11,11 @@ app.get("/test", urlencodedParser, function (request, response) {
 
   response.sendFile(__dirname + "/test.html");
 });
-app.post("/test", urlencodedParser, async function (req, response) {
+app.post("/check", urlencodedParser, async function (req, response) {
+  console.log(req.body)
   var options = {
     host: 'api.github.com',
-    path: '/users/' + username + '/repos',
+    path: '/users/' + req.body.userName + '/repos',
     method: 'GET',
     headers: {'user-agent': 'node.js'}
   };
@@ -25,18 +26,19 @@ app.post("/test", urlencodedParser, async function (req, response) {
     });
 
     response.on("end", function(){
-      console.log("Body: ", body);
+      console.log(JSON.parse(body));
+      // var element = document.createElement("div")
+      // element.innerText = `${JSON.parse(body)}`
     });
   });
 
   request.end();
   if(!req.body) return response.sendStatus(400);
-  console.log(request.body);
+
   response.send(request.body);
 });
 
-app.get("/", function(request, response){
-  response.send("Главная страница");
+app.get("/check", function(request, response){
 });
 
 app.listen(3000);
